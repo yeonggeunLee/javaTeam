@@ -1,1 +1,4 @@
+wdb\wdb\select.class
+wdb\wdb\jsonTodb.class
 wdb\wdb\WDB.class
+wdb\wdb\DBConn.class
