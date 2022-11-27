@@ -4,10 +4,18 @@
  */
 package wdb.wdb;
 
+import java.awt.event.*;
+
 /**
  *
  * @author 이영근
  */
-class DBConn {
-    
+public class screenexit extends WindowAdapter {
+
+    @Override
+    public void windowClosing(WindowEvent we) {
+        we.getWindow().setVisible(false);
+        we.getWindow().dispose();
+        //System.exit(0);
+    }
 }

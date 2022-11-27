@@ -10,13 +10,17 @@ import java.util.*;
 
 public class WDB {
 	public static void main(String[] args) {
+                // JSON 데이터 저장하는 데이터베이스 객체 생성
                 //jsonTodb stationInfoSet = new jsonTodb();
-		select showjsonDB = new select();
-		try {
-			showjsonDB.printsql();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+                
+                // 데이터베이스 선택해서 출력하는 객체 생성
+//		select showjsonDB = new select();
+//		try {
+//			showjsonDB.printsql();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+                Screens sc = new Screens();
 	}
 }
 //    public static void main(String[] args) throws ClassNotFoundException, SQLException {

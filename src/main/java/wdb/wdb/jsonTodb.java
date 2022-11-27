@@ -17,9 +17,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class jsonTodb {
-    
     Connection con = null; // 멤버변수
-    //String query;
     Statement stmt = null;
     PreparedStatement pstmt = null;
     
@@ -55,12 +53,14 @@ public class jsonTodb {
         // 데이터베이스
             String SQL = "INSERT INTO JSONPARSE(LINE_NUM, STATION_NM_ENG,STATION_NM, STATION_CD, FR_CODE) VALUES(?,?,?,?,?)";
             pstmt = con.prepareStatement(SQL);
+            // 각각 키 저장할 변수 생성
             String getLineNum = "";
             String getStnNEng = "";
             String getStnName = "";
             String getStnCd = "";
             String getFrCd  = "";
 
+            // 각각의 키를 저장하고 데이터베이스에 입력
             if (StationInfo.size() > 0) {
                 for (int i = 0; i < StationInfo.size(); i++) {
                     JSONObject Station = (JSONObject) StationInfo.get(i);
@@ -78,9 +78,7 @@ public class jsonTodb {
                     pstmt.executeUpdate();
                     
                 }
-            }
-//            String SQL2 = "INSERT INTO JSONPARSE(LINE_NUM, STATION_NM_ENG,STATION_NM, STATION_CD, FR_CODE) VALUES(?,?,?,?,?)";
-//            pstmt = con.prepareStatement(SQL2);
+            }            
             System.out.println("JSON 파싱 및 데이터베이스 저장 완료");
         } catch (Exception e) {
             e.printStackTrace();

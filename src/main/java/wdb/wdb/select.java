@@ -28,6 +28,7 @@ public class select {
 		} catch (Exception e) {
 		}
 	}
+        // 데이터베이스에 저장된 데이터 출력
         void printsql() throws SQLException {
 		query = "SELECT * FROM JSONPARSE"; // sql문
 		stmt = con.createStatement();
