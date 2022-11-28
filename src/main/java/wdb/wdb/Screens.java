@@ -12,7 +12,8 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class Screens extends JFrame {
-
+    // 입력 데이터 데이터베이스 생성
+    inputdata InputData = new inputdata();
     // 입력 값 저장 변수
     String LineNum = "";
     String DepartureNm = "";
