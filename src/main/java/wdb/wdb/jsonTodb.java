@@ -3,105 +3,104 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package wdb.wdb;
-
+/**
+ *
+ * @author ÀÌ¿µ±Ù
+ */
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.sql.*;
-import java.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+
+// ÁöÇÏÃ¶ ³ë¼±µµ API µ¥ÀÌÅÍº£ÀÌ½º¿¡ ÀúÀåÇÏ´Â Å¬·¡½º
 public class jsonTodb {
-    Connection con = null; // ë©¤ë²„ë³€ìˆ˜
+    Connection con = null;
     Statement stmt = null;
     PreparedStatement pstmt = null;
     
-    public jsonTodb() {
-
-        // ì €ìž¥ëœ íŒŒì¼ ì´ìš©í•œ ë°©ë²•
-        String filepath = "F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\wdb\\wdb\\ì„œìš¸êµí†µê³µì‚¬ ë…¸ì„ ë³„ ì§€í•˜ì² ì—­ ì •ë³´.json";
-        // ë°ì´í„°ë² ì´ìŠ¤ ì„¸íŒ…
+    public jsonTodb() throws SQLException {
+        // µ¥ÀÌÅÍº£ÀÌ½º ¼¼ÆÃ
         String url = "jdbc:oracle:thin:@localhost:1521:orcl";
         String userID = "c##dbinput";
         String userPW = "3503";
         try {
             Class.forName("oracle.jdbc.OracleDriver");
-            System.out.println("JSON ì €ìž¥ ë“œë¼ì´ë²„ ë¡œë“œ ì„±ê³µ");
+            System.out.println("JSON ÀúÀå µå¶óÀÌ¹ö ·Îµå ¼º°ø");
         } catch (Exception e) {
         }
 
         try {
-            System.out.println("JSON ì €ìž¥ ë°ì´í„°ë² ì´ìŠ¤ì—°ê²° ì¤€ë¹„...");
+            System.out.println("JSON ÀúÀå µ¥ÀÌÅÍº£ÀÌ½º¿¬°á ÁØºñ...");
             con = DriverManager.getConnection(url, userID, userPW);
-            System.out.println("JSON ì €ìž¥ ë°ì´í„°ë² ì´ìŠ¤ì—°ê²° ì„±ê³µ");
+            System.out.println("JSON ÀúÀå µ¥ÀÌÅÍº£ÀÌ½º¿¬°á ¼º°ø");
         } catch (Exception e) {
         }
+            
+        // API
+        String key = "4d7769704164756433356745796663";
+        String result = ""; 
         
-        // json ë°ì´í„° íŒŒì‹±
+        // JSON ÆÄ½Ì
         try {
-            Reader reader = new FileReader(filepath);
+            StringBuilder API = new StringBuilder("http://openapi.seoul.go.kr:8088");
+            API.append("/" +  URLEncoder.encode(key,"UTF-8") );
+            API.append("/" +  URLEncoder.encode("json","UTF-8") );
+            API.append("/" + URLEncoder.encode("SearchSTNBySubwayLineInfo","UTF-8"));
+            API.append("/" + URLEncoder.encode("1","UTF-8"));
+            API.append("/" + URLEncoder.encode("800","UTF-8"));
+            
+            URL APIurl = new URL(API.toString());
+            HttpURLConnection conn = (HttpURLConnection) APIurl.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-type", "application/json");
+            BufferedReader rd;
+            
+            if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                System.out.println("ÆÄ½Ì¼º°ø! Response code: " + conn.getResponseCode());
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+            
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
-
-            JSONArray StationInfo = (JSONArray) jsonObject.get("DATA");
-        
-        // ë°ì´í„°ë² ì´ìŠ¤
+            JSONObject jsonObject = (JSONObject)jsonParser.parse(rd);
+            JSONObject jsonOB = (JSONObject)jsonObject.get("SearchSTNBySubwayLineInfo");
+            JSONArray dataArr =(JSONArray) jsonOB.get("row");
+            
+            // µ¥ÀÌÅÍ º£ÀÌ½º¿¡ API µ¥ÀÌÅÍ ÀúÀå
             String SQL = "INSERT INTO JSONPARSE(LINE_NUM, STATION_NM_ENG,STATION_NM, STATION_CD, FR_CODE) VALUES(?,?,?,?,?)";
             pstmt = con.prepareStatement(SQL);
-            // ê°ê° í‚¤ ì €ìž¥í•  ë³€ìˆ˜ ìƒì„±
+            // °¢ Å° ÀúÀåÇÏ´Â º¯¼ö
             String getLineNum = "";
             String getStnNEng = "";
             String getStnName = "";
             String getStnCd = "";
             String getFrCd  = "";
-
-            // ê°ê°ì˜ í‚¤ë¥¼ ì €ìž¥í•˜ê³  ë°ì´í„°ë² ì´ìŠ¤ì— ìž…ë ¥
-            if (StationInfo.size() > 0) {
-                for (int i = 0; i < StationInfo.size(); i++) {
-                    JSONObject Station = (JSONObject) StationInfo.get(i);
-                    getLineNum = (String) Station.get("line_num");
-                    getStnNEng = (String) Station.get("station_nm_eng");
-                    getStnName = (String) Station.get("station_nm");
-                    getStnCd = (String) Station.get("station_cd");
-                    getFrCd = (String) Station.get("fr_code");
-                    
-                    pstmt.setString(1, getLineNum);
-                    pstmt.setString(2, getStnNEng);
-                    pstmt.setString(3, getStnName);
-                    pstmt.setString(4, getStnCd);
-                    pstmt.setString(5, getFrCd);
-                    pstmt.executeUpdate();
-                    
-                }
-            }            
-            System.out.println("JSON íŒŒì‹± ë° ë°ì´í„°ë² ì´ìŠ¤ ì €ìž¥ ì™„ë£Œ");
-        } catch (Exception e) {
+            
+            for(int i = 0; i < dataArr.size(); i++){
+                JSONObject data = (JSONObject)dataArr.get(i);
+                getLineNum = (String) data.get("LINE_NUM");
+                getStnNEng = (String) data.get("STATION_NM_ENG");
+                getStnName = (String) data.get("STATION_NM");
+                getStnCd = (String) data.get("STATION_CD");
+                getFrCd  = (String) data.get("FR_CODE");
+                
+                pstmt.setString(1, getLineNum);
+                pstmt.setString(2, getStnNEng);
+                pstmt.setString(3, getStnName);
+                pstmt.setString(4, getStnCd);
+                pstmt.setString(5, getFrCd);
+                pstmt.executeUpdate();
+            }
+            System.out.println("JSON ÆÄ½Ì ¹× µ¥ÀÌÅÍº£ÀÌ½º ÀúÀå ¿Ï·á");
+        }catch(Exception e){
             e.printStackTrace();
         }
-        
-
-        // ë°”ë¡œ ê°€ì ¸ì˜¤ê¸°
-//        String key = "4d7769704164756433356745796663";
-//        String result = "";
-//        
-//        try {
-//            URL url = new URL("http://openapi.seoul.go.kr:8088/" + key + "/json/SearchSTNBySubwayLineInfo/1/800");
-//            BufferedReader bf;
-//            bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-//            result = bf.readLine();
-//            
-//            JSONParser jsonParser = new JSONParser();
-//            JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-//            System.out.println(jsonObject);
-//            } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-       
     }
 }

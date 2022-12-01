@@ -3,39 +3,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package wdb.wdb;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.*;
-import java.net.URL;
+/**
+ *
+ * @author ÀÌ¿µ±Ù
+ */
 import java.sql.*;
-import java.util.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
+// »ç¿ëÀÚ ÀÔ·ÂÀ» µ¥ÀÌÅÍ º£ÀÌ½º¿¡ ÀúÀåÇÏ´Â Å¬·¡½º
 public class inputdata {
-    Connection con = null; // ë©¤ë²„ë³€ìˆ˜
+    Connection con = null; // ë©¤ë?ë³???
     Statement stmt = null;
     PreparedStatement pstmt = null;
     
     public inputdata() {
-        // ë°ì´í„°ë² ì´ìŠ¤ ì„¸íŒ…
+        // µ¥ÀÌÅÍº£ÀÌ½º ¼¼ÆÃ
         String url = "jdbc:oracle:thin:@localhost:1521:orcl";
         String userID = "c##dbinput";
         String userPW = "3503";
         try {
             Class.forName("oracle.jdbc.OracleDriver");
-            System.out.println("ì…ë ¥ ë°ì´í„° ì €ì¥ ë“œë¼ì´ë²„ ë¡œë“œ ì„±ê³µ");
+            System.out.println("ÀÔ·Â µ¥ÀÌÅÍ ÀúÀå µå¶óÀÌ¹ö ·Îµå ¼º°ø");
         } catch (Exception e) {
         }
 
         try {
-            System.out.println("ì…ë ¥ ë°ì´í„° ì €ì¥ ë°ì´í„°ë² ì´ìŠ¤ì—°ê²° ì¤€ë¹„...");
+            System.out.println("ÀÔ·Â µ¥ÀÌÅÍ ÀúÀå µ¥ÀÌÅÍº£ÀÌ½º¿¬°á ÁØºñ...");
             con = DriverManager.getConnection(url, userID, userPW);
-            System.out.println("ì…ë ¥ ë°ì´í„° ì €ì¥ ë°ì´í„°ë² ì´ìŠ¤ì—°ê²° ì„±ê³µ");
+            System.out.println("ÀÔ·Â µ¥ÀÌÅÍ ÀúÀå µ¥ÀÌÅÍº£ÀÌ½º¿¬°á ¼º°ø");
         } catch (Exception e) {
         }
     }

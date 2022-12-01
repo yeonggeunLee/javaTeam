@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.*;
 
 public class select {
-	Connection con; // 멤버변수
+	Connection con;
 	String query;
 	Statement stmt;
 	ResultSet rs;
@@ -18,23 +18,20 @@ public class select {
                 String userPW = "3503";
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
-			System.out.println("선택 드라이버 로드 성공");
 		} catch (Exception e) {
 		}
 		try {
-			System.out.println("선택 데이터베이스연결 준비...");
 			con = DriverManager.getConnection(url, userID, userPW);
-			System.out.println("선택 데이터베이스연결 성공");
 		} catch (Exception e) {
 		}
 	}
-        // 데이터베이스에 저장된 데이터 출력
+        // �����ͺ��̽��� ����� ������ ���
         void printsql() throws SQLException {
-		query = "SELECT * FROM JSONPARSE"; // sql문
+		query = "SELECT * FROM JSONPARSE"; // sql�?
 		stmt = con.createStatement();
 		rs = stmt.executeQuery(query);
 		System.out.println("LINE_NUM,\t\t\t\t\tSTATION_NM_ENG, \t\t\t\t\tSTATION_NM, \t\t\t\t\tSTATION_CD, \t\t\t\t\tFR_CODE");
-		while (rs.next()) { // 한줄씩 읽는다 (튜플)
+		while (rs.next()) {
 			System.out.printf("%10s",rs.getString(1));
 			System.out.printf("%50s" , rs.getString(2));
 			System.out.printf("%50s" ,rs.getString(3));

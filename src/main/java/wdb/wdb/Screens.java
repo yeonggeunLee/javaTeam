@@ -3,101 +3,101 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package wdb.wdb;
-
+/**
+ *
+ * @author ÀÌ¿µ±Ù
+ */
 import java.awt.*;
-import java.awt.List;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import java.sql.*;
 
 public class Screens extends JFrame {
-    // ì…ë ¥ ë°ì´í„° ë°ì´í„°ë² ì´ìŠ¤ ìƒì„±
-    inputdata InputData = new inputdata();
-    // ì…ë ¥ ê°’ ì €ì¥ ë³€ìˆ˜
-    String LineNum = "";
-    String DepartureNm = "";
-    String ArriveNm = "";
-    String RideTime = "";
-    String RideDay = "";
-
-    // ë²„íŠ¼í´ë¦­ ë³€ìˆ˜
-    int AddBtn = 0;
-    int EditBtn = 0;
-    int DeleteBtn = 0;
-    int SearchBtn = 0;
     
-    // ëª¨ë‹¬ì°½ ì„ íƒ ë³€ìˆ˜
+    // ÀÔ·Â µ¥ÀÌÅÍ µ¥ÀÌÅÍº£ÀÌ½º »ı¼º
+    inputdata InputData = new inputdata();
+    PreparedStatement pstmt = null;
+    
+    // ¸ğ´ŞÃ¢ ¼±ÅÃ º¯¼ö
     int modalscreen = 0;
     
-    // ë…¸ì„ ë„ ì´ë¯¸ì§€ ë¦¬ìŠ¤íŠ¸ ì„ íƒ ë³€ìˆ˜
-    int selectedImage = 0;
+    // ³ë¼±µµ ÀÌ¹ÌÁö ÆĞ³Î
     Panel pane = new Panel();
     
+    // ³Ñ°ÜÁÙ °ª º¯¼ö
+    String passLineNum = "";
+    String passDepNm = "";
+    String passArvNm = "";
+    String passRTime = "";
+    String passRDay = "";
+    
     public Screens() {
-        Frame f = new Frame("ì§€í•˜ì²  í˜¼ì¡ë„ ì •ë³´ ì‹œìŠ¤í…œ");
+        // ¸ŞÀÎÈ­¸é ÇÁ·¹ÀÓ »ı¼º
+        Frame f = new Frame("ÁöÇÏÃ¶ È¥Àâµµ Á¤º¸ ½Ã½ºÅÛ");
         f.setSize(1024, 600);
         f.setLayout(null);
 
-        // ìƒë‹¨ ë©”ë‰´
+        // »ó´Ü ¸Ş´º
         MenuBar menu = new MenuBar();
-        Menu n1 = new Menu("ë…¸ì„ ë„");
-        MenuItem a = new MenuItem("ë…¸ì„ ë„");
+        Menu n1 = new Menu("³ë¼±µµ");
+        MenuItem a = new MenuItem("³ë¼±µµ");
         n1.add(a);
         
-        // ë©”ë‰´ì°½ ì•¡ì…˜ ì¶”ê°€ (ì™„ë£Œ)
+        // ¸Ş´ºÃ¢ ¾×¼Ç Ãß°¡
         ActionListener Menulistener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String cmd = e.getActionCommand();
                 switch (cmd) {
-                    case "ë…¸ì„ ë„":
+                    case "³ë¼±µµ":
                         modalscreen = 1;
-                        // ë…¸ì„ ë„ ì´ë¯¸ì§€ ëª¨ë‹¬ì°½ ë‹¤ì´ì–¼ë¡œê·¸ (ëª¨ë‹¬ ì°½ ì¶”ê°€í•„ìš”)
+                        // ³ë¼±µµ ÀÌ¹Ì ¸ğ´ŞÇü½Ä ÇÁ·¹ÀÓ »ı¼º
                         if (modalscreen == 1) {
-                            Frame popF = new Frame("ì§€í•˜ì²  ë…¸ì„ ë„");
+                            Frame popF = new Frame("ÁöÇÏÃ¶ ³ë¼±µµ");
                             popF.setSize(1440,960);
                             popF.setLayout(null);
                             
-                            // ë…¸ì„  ì„ íƒ
+                            // ?¸ì?? ???? ì½¤ë³´ë°??? ????
                             Choice cInfoLine = new Choice();
-                            cInfoLine.add("1í˜¸ì„ ");
-                            cInfoLine.add("2í˜¸ì„ ");
-                            cInfoLine.add("3í˜¸ì„ ");
-                            cInfoLine.add("4í˜¸ì„ ");
-                            cInfoLine.add("5í˜¸ì„ ");
-                            cInfoLine.add("6í˜¸ì„ ");
-                            cInfoLine.add("7í˜¸ì„ ");
-                            cInfoLine.add("8í˜¸ì„ ");
-                            cInfoLine.add("9í˜¸ì„ ");
+                            cInfoLine.add("1È£¼±");
+                            cInfoLine.add("2È£¼±");
+                            cInfoLine.add("3È£¼±");
+                            cInfoLine.add("4È£¼±");
+                            cInfoLine.add("5È£¼±");
+                            cInfoLine.add("6È£¼±");
+                            cInfoLine.add("7È£¼±");
+                            cInfoLine.add("8È£¼±");
+                            cInfoLine.add("9È£¼±");
                             cInfoLine.setSize(80, 60);
                             cInfoLine.setLocation(50, 50);
                             popF.add(cInfoLine);
                             
-                            // ë…¸ì„ ë„ ì´ë¯¸ì§€
+                            // ³ë¼±µµ ÀÌ¹ÌÁö Ãâ·ÂÇÏ´Â ¾×¼Ç
                             ItemListener InfoLinelistener = new ItemListener() {
                                 @Override
                                 public void itemStateChanged(ItemEvent e) {
-//                                    Panel pane = new Panel();
-                                    if (cInfoLine.getSelectedItem() == "1í˜¸ì„ ") {
+                                    if (cInfoLine.getSelectedItem() == "1È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_1.png");
                                         Image img = icon.getImage();
-//                                        Panel pane = new Panel();
                                         TestFrame test = new TestFrame(img);
                                         pane.setSize(1340, 860);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
-                                    } else if (cInfoLine.getSelectedItem() == "2í˜¸ì„ ") {
+                                    } else if (cInfoLine.getSelectedItem() == "2È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_2.png");
                                         Image img = icon.getImage();
-//                                        Panel pane = new Panel();
                                         TestFrame test = new TestFrame(img);
                                         pane.setSize(1340, 860);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
-                                    } else if (cInfoLine.getSelectedItem() == "3í˜¸ì„ ") {
+                                    } else if (cInfoLine.getSelectedItem() == "3È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_3.png");
                                         Image img = icon.getImage();
 //                                        Panel pane = new Panel();
@@ -105,8 +105,9 @@ public class Screens extends JFrame {
                                         pane.setSize(1340, 860);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
-                                    } else if (cInfoLine.getSelectedItem() == "4í˜¸ì„ ") {
+                                    } else if (cInfoLine.getSelectedItem() == "4È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_4.png");
                                         Image img = icon.getImage();
 //                                        Panel pane = new Panel();
@@ -114,26 +115,27 @@ public class Screens extends JFrame {
                                         pane.setSize(1340, 860);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
-                                    } else if (cInfoLine.getSelectedItem() == "5í˜¸ì„ ") {
+                                    } else if (cInfoLine.getSelectedItem() == "5È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_5.png");
                                         Image img = icon.getImage();
-//                                        Panel pane = new Panel();
                                         TestFrame test = new TestFrame(img);
                                         pane.setSize(1340, 860);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
-                                    } else if (cInfoLine.getSelectedItem() == "6í˜¸ì„ ") {
+                                    } else if (cInfoLine.getSelectedItem() == "6È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_6.png");
                                         Image img = icon.getImage();
-//                                        Panel pane = new Panel();
                                         TestFrame test = new TestFrame(img);
                                         pane.setSize(1340, 860);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
-                                    } else if (cInfoLine.getSelectedItem() == "7í˜¸ì„ ") {
+                                    } else if (cInfoLine.getSelectedItem() == "7È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_7.png");
                                         Image img = icon.getImage();
 //                                        Panel pane = new Panel();
@@ -141,8 +143,9 @@ public class Screens extends JFrame {
                                         pane.setSize(1340, 860);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
-                                    } else if (cInfoLine.getSelectedItem() == "8í˜¸ì„ ") {
+                                    } else if (cInfoLine.getSelectedItem() == "8È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_8.png");
                                         Image img = icon.getImage();
 //                                        Panel pane = new Panel();
@@ -150,16 +153,16 @@ public class Screens extends JFrame {
                                         pane.setSize(1340, 860);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
-                                    } else if (cInfoLine.getSelectedItem() == "9í˜¸ì„ ") {
+                                    } else if (cInfoLine.getSelectedItem() == "9È£¼±") {
+                                        pane.removeAll();
+                                        popF.add(cInfoLine);
                                         ImageIcon icon = new ImageIcon("F:\\javasource\\javaTeam\\WDB\\src\\main\\java\\Image\\Line_9.png");
                                         Image img = icon.getImage();
 //                                        Panel pane = new Panel();
                                         TestFrame test = new TestFrame(img);
-                                        pane.setSize(900, 560);
+                                        pane.setSize(1200, 1060);
                                         pane.setLocation(250, 50);
                                         pane.add(test);
-//                                        popF.add(pane);
                                     }
                                     popF.add(pane);
                                 }
@@ -176,83 +179,31 @@ public class Screens extends JFrame {
         menu.add(n1);
         f.setMenuBar(menu);
 
-        // ë…¸ì„  ì…ë ¥
-        Label lLinenum = new Label("ì¶œë°œì—­ ë…¸ì„ ");
+        // ³ë¼± ÀÔ·Â ÄŞº¸¹Ú½º »ı¼º
+        Label lLinenum = new Label("Ãâ¹ß¿ª ³ë¼±");
         lLinenum.setSize(65, 50);
         lLinenum.setLocation(20, 77);
         f.add(lLinenum);
         Choice cLinenum = new Choice();
-        cLinenum.add("1í˜¸ì„ ");
-        cLinenum.add("2í˜¸ì„ ");
-        cLinenum.add("3í˜¸ì„ ");
-        cLinenum.add("4í˜¸ì„ ");
-        cLinenum.add("5í˜¸ì„ ");
-        cLinenum.add("6í˜¸ì„ ");
-        cLinenum.add("7í˜¸ì„ ");
-        cLinenum.add("8í˜¸ì„ ");
-        cLinenum.add("9í˜¸ì„ ");
+        cLinenum.add("1È£¼±");
+        cLinenum.add("2È£¼±");
+        cLinenum.add("3È£¼±");
+        cLinenum.add("4È£¼±");
+        cLinenum.add("5È£¼±");
+        cLinenum.add("6È£¼±");
+        cLinenum.add("7È£¼±");
+        cLinenum.add("8È£¼±");
+        cLinenum.add("9È£¼±");
         cLinenum.setSize(80, 60);
         cLinenum.setLocation(95, 90);
         f.add(cLinenum);
-        
-        // ë…¸ì„  ì…ë ¥ ì•¡ì…˜ ì¶”ê°€ (ì™„)
-//        ItemListener cLinenumListener = new ItemListener() {
-//            @Override
-//            public void itemStateChanged(ItemEvent e) {
-//                Choice ch = (Choice) e.getSource();
-//                String selected = ch.getSelectedItem();
-//                if(selected == "1í˜¸ì„ "){
-//                    LineNum = "1í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//                else if(selected == "2í˜¸ì„ "){
-//                    LineNum = "2í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//                else if(selected == "3í˜¸ì„ "){
-//                    LineNum = "3í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//                else if(selected == "4í˜¸ì„ "){
-//                    LineNum = "4í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//                else if(selected == "5í˜¸ì„ "){
-//                    LineNum = "5í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//                else if(selected == "6í˜¸ì„ "){
-//                    LineNum = "6í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//                else if(selected == "7í˜¸ì„ "){
-//                    LineNum = "7í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//                else if(selected == "8í˜¸ì„ "){
-//                    LineNum = "8í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//                else if(selected == "9í˜¸ì„ "){
-//                    LineNum = "9í˜¸ì„ ";
-////                    System.out.println(LineNum);
-//                }
-//            }
-//        };
-//        cLinenum.addItemListener(cLinenumListener);
 
-        // ì¶œë°œ,ë„ì°©ì—­ ì…ë ¥
-        //Panel pStart = new Panel();
-        //Panel pArrive = new Panel();
-        Label lStart = new Label("ì¶œë°œì—­");
-        Label lArrive = new Label("ë„ì°©ì—­");
+        // Ãâ¹ß¿ª, µµÂø¿ª ÀÔ·Â TextField »ı¼º
+        Label lStart = new Label("Ãâ¹ß¿ª");
+        Label lArrive = new Label("µµÂø¿ª");
         TextField tf1 = new TextField(20);
         TextField tf2 = new TextField(20);
-//        pStart.add(lStart); pStart.add(tf1);
-//        pArrive.add(lArrive); pArrive.add(tf2);
-//        pStart.setSize(180,50);    pStart.setLocation(40,60);
-//        pArrive.setSize(180,50);    pArrive.setLocation(300,60);
-//        f.add(pStart);  f.add(pArrive);
+        
         lStart.setSize(50, 50);
         lStart.setLocation(190, 77);
         f.add(lStart);
@@ -266,11 +217,9 @@ public class Screens extends JFrame {
         tf2.setLocation(440, 90);
         f.add(tf2);
 
-        // íƒ‘ìŠ¹ì‹œê°„ ëª©ë¡ ì„ íƒ
-        //Panel pLine = new Panel();
+        // Å¾½Â½Ã°£ ¸ñ·Ï ÄŞº¸¹Ú½º »ı¼º
         Choice cLine = new Choice();
-        Label lLine = new Label("íƒ‘ìŠ¹ì‹œê°„");
-        //lLine.setLocation(595, 60);
+        Label lLine = new Label("Å¾½Â½Ã°£");
         cLine.add("05:30");
         cLine.add("06:00");
         cLine.add("06:30");
@@ -308,212 +257,28 @@ public class Screens extends JFrame {
         cLine.add("22:30");
         cLine.add("23:00");
         cLine.add("23:30");
-        //pLine.add(lLine);//   pLine.add(cLine);
         cLine.setSize(80, 60);
         cLine.setLocation(670, 90);
         lLine.setSize(100, 50);
         lLine.setLocation(595, 77);
-        //pLine.setSize(100,50);     pLine.setLocation(595, 60);
         f.add(cLine);
         f.add(lLine);   //f.add(pLine);
-        
-        // íƒ‘ìŠ¹ì‹œê°„ ì•¡ì…˜ ì¶”ê°€ (ì™„)
-//         ItemListener cLineListener = new ItemListener() {
-//            @Override
-//            public void itemStateChanged(ItemEvent e) {
-//                Choice ch = (Choice) e.getSource();
-//                String selected = ch.getSelectedItem();
-//                if(selected == "05:30"){
-//                    RideTime = "05:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "06:00"){
-//                    RideTime = "06:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "06:30"){
-//                    RideTime = "06:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "07:00"){
-//                    RideTime = "07:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "07:30"){
-//                    RideTime = "07:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "08:00"){
-//                    RideTime = "08:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "08:30"){
-//                    RideTime = "08:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "09:00"){
-//                    RideTime = "09:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "09:30"){
-//                    RideTime = "09:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "10:00"){
-//                    RideTime = "10:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "10:30"){
-//                    RideTime = "10:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "11:00"){
-//                    RideTime = "11:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "11:30"){
-//                    RideTime = "11:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "12:00"){
-//                    RideTime = "12:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "12:30"){
-//                    RideTime = "12:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "13:00"){
-//                    RideTime = "13:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "13:30"){
-//                    RideTime = "13:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "14:00"){
-//                    RideTime = "14:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "14:30"){
-//                    RideTime = "14:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "15:00"){
-//                    RideTime = "15:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "15:30"){
-//                    RideTime = "15:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "16:00"){
-//                    RideTime = "16:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "16:30"){
-//                    RideTime = "16:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "17:00"){
-//                    RideTime = "17:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "17:30"){
-//                    RideTime = "17:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "18:00"){
-//                    RideTime = "18:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "18:30"){
-//                    RideTime = "18:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "19:00"){
-//                    RideTime = "19:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "19:30"){
-//                    RideTime = "19:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "20:00"){
-//                    RideTime = "20:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "20:30"){
-//                    RideTime = "20:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "21:00"){
-//                    RideTime = "21:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "21:30"){
-//                    RideTime = "21:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "22:00"){
-//                    RideTime = "22:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "22:30"){
-//                    RideTime = "22:30";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "23:00"){
-//                    RideTime = "23:00";
-////                    System.out.println(RideTime);
-//                }
-//                else if(selected == "23:30"){
-//                    RideTime = "23:30";
-////                    System.out.println(RideTime);
-//                }
-//            }
-//        };
-//        cLine.addItemListener(cLineListener);
-
-        // íƒ‘ìŠ¹ìš”ì¼ ëª©ë¡ ì„ íƒ
-        //Panel pDay = new Panel();
+       
+        // Å¾½Â¿äÀÏ ¸ñ·Ï ÄŞº¸¹Ú½º »ı¼º
         Choice cDay = new Choice();
-        Label lDay = new Label("íƒ‘ìŠ¹ìš”ì¼");
-        cDay.add("ì›”~ê¸ˆ");
-        cDay.add("í† ");
-        cDay.add("ê³µíœ´ì¼");
-        //pDay.add(lDay); pDay.setSize(100,50);  pDay.setLocation(855, 60);
+        Label lDay = new Label("Å¾½Â¿äÀÏ");
+        cDay.add("¿ù~±İ");
+        cDay.add("Åä");
+        cDay.add("°øÈŞÀÏ");
         cDay.setSize(80, 60);
         cDay.setLocation(900, 90);
         lDay.setSize(100, 50);
         lDay.setLocation(825, 77);
         f.add(cDay);
-        f.add(lDay);    //f.add(pDay);
-
-        // íƒ‘ìŠ¹ìš”ì¼ ì•¡ì…˜ ì¶”ê°€ (ì™„)
-//         ItemListener cDayListener = new ItemListener() {
-//            @Override
-//            public void itemStateChanged(ItemEvent e) {
-//                Choice ch = (Choice) e.getSource();
-//                String selected = ch.getSelectedItem();
-//                if(selected == "ì›”~ê¸ˆ"){
-//                    RideDay = "ì›”~ê¸ˆ";
-////                    System.out.println(RideDay);
-//                }
-//                else if(selected == "í† "){
-//                    RideDay = "í† ";
-////                    System.out.println(RideDay);
-//                }
-//                else if(selected == "ê³µíœ´ì¼"){
-//                    RideDay = "ê³µíœ´ì¼";
-////                    System.out.println(RideDay);
-//                }
-//            }
-//        };
-//        cDay.addItemListener(cDayListener);
+        f.add(lDay);
         
-        // ì €ì¥ ë¦¬ìŠ¤íŠ¸ (TextAreaë¡œ í• ì§€ Tableë¡œ í• ì§€ ë‹¤ë¥¸ ë°©ì•ˆ ê²€ìƒ‰)
-        String header[] = {"ì¶œë°œì—­ ë…¸ì„ ","ì¶œë°œì—­","ë„ì°©ì—­","íƒ‘ìŠ¹ì‹œê°„","íƒ‘ìŠ¹ìš”ì¼"};
+        // ¸ŞÀÎÈ­¸é »ç¿ëÀÚ ÀÔ·Âµ¥ÀÌÅÍ ³ÖÀ» Å×ÀÌºí »ı¼º
+        String header[] = {"Ãâ¹ß¿ª ³ë¼±","Ãâ¹ß¿ª","µµÂø¿ª","Å¾½Â½Ã°£","Å¾½Â¿äÀÏ"};
         String contents[][] = {};
         
         DefaultTableModel model = new DefaultTableModel(contents, header);
@@ -525,18 +290,40 @@ public class Screens extends JFrame {
         
         f.add(scrollPane);
         
-        // ì¶”ê°€ ë²„íŠ¼ (ì…ë ¥ ê²°ê³¼ ì°½ì— ë‚˜ì˜¤ê²Œ ì¶”ê°€ í•„ìš”), (ì„¸ë¶€ ê¸°ëŠ¥ ì¶”ê°€ í•„ìš”)
-        Button bAdd = new Button("ì¶”ê°€");
+        // Ãß°¡ ¹öÆ°  (Å¬¸¯ ½Ã »ç¿ëÀÚ ÀÔ·Â µ¥ÀÌÅÍ°¡ Å×ÀÌºí ¹× µ¥ÀÌÅÍº£ÀÌ½º¿¡ ÀúÀå)
+        Button bAdd = new Button("Ãß°¡");
          ActionListener bAddListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                // »ç¿ëÀÚ ÀÔ·Âµ¥ÀÌÅÍ
                 String inputStr[] = new String[5];
                 inputStr[0] = cLinenum.getSelectedItem();
                 inputStr[1] = tf1.getText();
                 inputStr[2] = tf2.getText();
                 inputStr[3] = cLine.getSelectedItem();
                 inputStr[4] = cDay.getSelectedItem();
+                // ³Ñ°ÜÁÙ °ª ÀúÀå º¯¼ö
+                passLineNum = cLinenum.getSelectedItem();
+                passDepNm = tf1.getText();
+                passArvNm = tf2.getText();
+                passRTime = cLine.getSelectedItem();
+                passRDay = cDay.getSelectedItem();
                 
+                // »ç¿ëÀÚ ÀÔ·Â µ¥ÀÌÅÍº£ÀÌ½º¿¡ ÀúÀå
+                try {
+                    String SQL = "INSERT INTO USERINPUT(LINE_NUM, DEPARTURE, ARRIVE, RIDETIME, RIDEDAY) VALUES(?,?,?,?,?)";
+                    pstmt = InputData.con.prepareStatement(SQL);
+                    pstmt.setString(1, inputStr[0]);
+                    pstmt.setString(2, inputStr[1]);
+                    pstmt.setString(3, inputStr[2]);
+                    pstmt.setString(4, inputStr[3]);
+                    pstmt.setString(5, inputStr[4]);
+                    pstmt.executeUpdate();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                
+                // Å×ÀÌºí »ı¼º
                 model.addRow(inputStr);
                 tf1.setText("");
                 tf2.setText("");
@@ -544,8 +331,8 @@ public class Screens extends JFrame {
         };
         bAdd.addActionListener(bAddListener);
 
-        // ìˆ˜ì • ë²„íŠ¼ (ì„¸ë¶€ ê¸°ëŠ¥ ì¶”ê°€ í•„ìš”)
-        Button bEdit = new Button("ìˆ˜ì •");
+        // ¼öÁ¤ ¹öÆ° (¼¼ºÎ ±â´É Ãß°¡ ÇÊ¿ä)
+        Button bEdit = new Button("¼öÁ¤");
         ActionListener bEditListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -553,6 +340,7 @@ public class Screens extends JFrame {
                     return;
                 }
                 else {
+//                    System.out.println(table.getSelectedRow());
 //                    model.removeRow(table.getSelectedRow());
                     String inputStr[] = new String[5];
                     inputStr[0] = cLinenum.getSelectedItem();
@@ -563,13 +351,25 @@ public class Screens extends JFrame {
                     for(int i = 0 ; i< 5;i++){
                         model.setValueAt(inputStr[i], table.getSelectedRow(), i);
                     }
+//                    try {
+//                    String SQL = "UPDATE USERINPUT SET(LINE_NUM, DEPARTURE, ARRIVE, RIDETIME, RIDEDAY) VALUES(?,?,?,?,?)";
+//                    pstmt = InputData.con.prepareStatement(SQL);
+//                    pstmt.setString(1, inputStr[0]);
+//                    pstmt.setString(2, inputStr[1]);
+//                    pstmt.setString(3, inputStr[2]);
+//                    pstmt.setString(4, inputStr[3]);
+//                    pstmt.setString(5, inputStr[4]);
+//                    pstmt.executeUpdate();
+//                } catch (SQLException ex) {
+//                    ex.printStackTrace();
+//                }
                 }
             }
         };
         bEdit.addActionListener(bEditListener);
 
-        // ì‚­ì œ ë²„íŠ¼ (ì„¸ë¶€ ê¸°ëŠ¥ ì¶”ê°€ í•„ìš”)
-        Button bDelete = new Button("ì‚­ì œ");
+        // »èÁ¦ ¹öÆ° (¼¼ºÎ ±â´É Ãß°¡ ÇÊ¿ä)
+        Button bDelete = new Button("»èÁ¦");
         ActionListener bDeleteListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -583,13 +383,12 @@ public class Screens extends JFrame {
         };
         bDelete.addActionListener(bDeleteListener);
 
-        // ê²€ìƒ‰ ë²„íŠ¼ (ì„¸ë¶€ ê¸°ëŠ¥ ì¶”ê°€ í•„ìš”)
-        Button bSearch = new Button("ê²€ìƒ‰");
+        // °Ë»ö ¹öÆ° (¼¼ºÎ ±â´É Ãß°¡ ÇÊ¿ä)
+        Button bSearch = new Button("°Ë»ö");
         ActionListener bSearchListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (bSearch.equals(ae.getSource())) {
-                    SearchBtn = 1;
 //                    System.out.println(SearchBtn);
                 }
             }
@@ -605,20 +404,13 @@ public class Screens extends JFrame {
         bSearch.setSize(150, 40);
         bSearch.setLocation(830, 150);
 
+        // ¸ŞÀÎÈ­¸é ÇÁ·¹ÀÓ¿¡ ¹öÆ° Ãß°¡
         f.add(bAdd);
         f.add(bEdit);
         f.add(bDelete);
         f.add(bSearch);
 
-        
-        
-
-
         f.addWindowListener(new screenexit());
         f.setVisible(true);
     }
-    public void modalscreen(){
-        
-    }
-
 }
