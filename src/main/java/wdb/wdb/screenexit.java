@@ -8,9 +8,9 @@ import java.awt.event.*;
 
 /**
  *
- * @author ÀÌ¿µ±Ù
+ * @author ì´ì˜ê·¼
  */
-// È­¸é x Å¬¸¯½Ã ²¨Áö´Â Å¬·¡½º
+// í™”ë©´ x í´ë¦­ì‹œ êº¼ì§€ëŠ” í´ë˜ìŠ¤
 public class screenexit extends WindowAdapter {
     @Override
     public void windowClosing(WindowEvent we) {

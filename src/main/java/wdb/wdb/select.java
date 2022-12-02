@@ -3,41 +3,47 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package wdb.wdb;
+
+/**
+ *
+ * @author Ïù¥ÏòÅÍ∑º
+ */
 import java.sql.*;
-import java.io.*;
-import java.util.*;
 
 public class select {
-	Connection con;
-	String query;
-	Statement stmt;
-	ResultSet rs;
-	public select() {
-		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String userID = "c##dbinput";
-                String userPW = "3503";
-		try {
-			Class.forName("oracle.jdbc.OracleDriver");
-		} catch (Exception e) {
-		}
-		try {
-			con = DriverManager.getConnection(url, userID, userPW);
-		} catch (Exception e) {
-		}
-	}
-        // µ•¿Ã≈Õ∫£¿ÃΩ∫ø° ¿˙¿Âµ» µ•¿Ã≈Õ √‚∑¬
-        void printsql() throws SQLException {
-		query = "SELECT * FROM JSONPARSE"; // sqlÎ¨?
-		stmt = con.createStatement();
-		rs = stmt.executeQuery(query);
-		System.out.println("LINE_NUM,\t\t\t\t\tSTATION_NM_ENG, \t\t\t\t\tSTATION_NM, \t\t\t\t\tSTATION_CD, \t\t\t\t\tFR_CODE");
-		while (rs.next()) {
-			System.out.printf("%10s",rs.getString(1));
-			System.out.printf("%50s" , rs.getString(2));
-			System.out.printf("%50s" ,rs.getString(3));
-			System.out.printf("%50s" , rs.getString(4));
-                        System.out.printf("%50s\n" , rs.getString(5));
-		}
-		con.close();
-	}
+
+    Connection con;
+    String query;
+    Statement stmt;
+    ResultSet rs;
+
+    // ÎÑòÍ≤®Ï§Ñ Í∞í Î≥ÄÏàò
+    String passLineNum = "";
+    String passDepNm = "";
+    String passStationCd = "";
+
+    public select() {
+        String url = "jdbc:mysql://localhost:3306/jsonParse?serverTimezone=Asia/Seoul&useSSL=false";
+        String userID = "JAVATEAM";
+        String userPW = "team3503";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection(url, userID, userPW);
+        } catch (ClassNotFoundException e) {
+        } catch (SQLException e) {
+        }
+    }
+    // Îç∞Ïù¥ÌÑ∞Î≤†Ïù¥Ïä§Ïóê Ï†ÄÏû•Îêú Îç∞Ïù¥ÌÑ∞ Ï∂úÎ†•
+
+    void printsql(String query) throws SQLException {
+        this.query = query;
+        stmt = con.createStatement();
+        rs = stmt.executeQuery(this.query);
+        while (rs.next()) {
+            passLineNum = rs.getString(1);
+            passDepNm = rs.getString(2);
+            passStationCd = rs.getString(4);
+        }
+        con.close();
+    }
 }

@@ -5,15 +5,14 @@
 package wdb.wdb;
 /**
  *
- * @author ÀÌ¿µ±Ù
+ * @author ì´ì˜ê·¼
  */
 import java.awt.*;
 import javax.swing.*;
 
-// ³ë¼±µµ ÀÌ¹ÌÁö ±×¸®´Â Å¬·¡½º
+// ë…¸ì„ ë„ ì´ë¯¸ì§€ ê·¸ë¦¬ëŠ” í´ë˜ìŠ¤
 public class TestFrame extends JPanel {
-    public TestFrame() {
-}
+    public TestFrame() {}
     private Image img;
     
     public TestFrame(Image img) {

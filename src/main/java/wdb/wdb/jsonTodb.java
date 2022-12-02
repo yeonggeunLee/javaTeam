@@ -5,7 +5,7 @@
 package wdb.wdb;
 /**
  *
- * @author ÀÌ¿µ±Ù
+ * @author ì´ì˜ê·¼
  */
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,35 +18,29 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 
-// ÁöÇÏÃ¶ ³ë¼±µµ API µ¥ÀÌÅÍº£ÀÌ½º¿¡ ÀúÀåÇÏ´Â Å¬·¡½º
+// ì§€í•˜ì²  ë…¸ì„ ë„ API ë°ì´í„°ë² ì´ìŠ¤ì— ì €ìž¥í•˜ëŠ” í´ëž˜ìŠ¤
 public class jsonTodb {
     Connection con = null;
     Statement stmt = null;
     PreparedStatement pstmt = null;
     
     public jsonTodb() throws SQLException {
-        // µ¥ÀÌÅÍº£ÀÌ½º ¼¼ÆÃ
-        String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-        String userID = "c##dbinput";
-        String userPW = "3503";
+        // ë°ì´í„°ë² ì´ìŠ¤ ì„¸íŒ…
+        String url = "jdbc:mysql://localhost:3306/jsonParse?serverTimezone=Asia/Seoul&useSSL=false";
+        String userID = "JAVATEAM";
+        String userPW = "team3503";
         try {
-            Class.forName("oracle.jdbc.OracleDriver");
-            System.out.println("JSON ÀúÀå µå¶óÀÌ¹ö ·Îµå ¼º°ø");
-        } catch (Exception e) {
-        }
-
-        try {
-            System.out.println("JSON ÀúÀå µ¥ÀÌÅÍº£ÀÌ½º¿¬°á ÁØºñ...");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(url, userID, userPW);
-            System.out.println("JSON ÀúÀå µ¥ÀÌÅÍº£ÀÌ½º¿¬°á ¼º°ø");
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
+        } catch (SQLException e) {
         }
             
         // API
         String key = "4d7769704164756433356745796663";
         String result = ""; 
         
-        // JSON ÆÄ½Ì
+        // JSON íŒŒì‹±
         try {
             StringBuilder API = new StringBuilder("http://openapi.seoul.go.kr:8088");
             API.append("/" +  URLEncoder.encode(key,"UTF-8") );
@@ -62,8 +56,7 @@ public class jsonTodb {
             BufferedReader rd;
             
             if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-                System.out.println("ÆÄ½Ì¼º°ø! Response code: " + conn.getResponseCode());
-                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
             } else {
                 rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             }
@@ -73,10 +66,12 @@ public class jsonTodb {
             JSONObject jsonOB = (JSONObject)jsonObject.get("SearchSTNBySubwayLineInfo");
             JSONArray dataArr =(JSONArray) jsonOB.get("row");
             
-            // µ¥ÀÌÅÍ º£ÀÌ½º¿¡ API µ¥ÀÌÅÍ ÀúÀå
-            String SQL = "INSERT INTO JSONPARSE(LINE_NUM, STATION_NM_ENG,STATION_NM, STATION_CD, FR_CODE) VALUES(?,?,?,?,?)";
+            
+            
+            // ë°ì´í„° ë² ì´ìŠ¤ì— API ë°ì´í„° ì €ìž¥
+            String SQL = "INSERT INTO jsonP(LINE_NUM, STATION_NM_ENG,STATION_NM, STATION_CD, FR_CODE) VALUES(?,?,?,?,?)";
             pstmt = con.prepareStatement(SQL);
-            // °¢ Å° ÀúÀåÇÏ´Â º¯¼ö
+            // ê° í‚¤ ì €ìž¥í•˜ëŠ” ë³€ìˆ˜
             String getLineNum = "";
             String getStnNEng = "";
             String getStnName = "";
@@ -98,7 +93,7 @@ public class jsonTodb {
                 pstmt.setString(5, getFrCd);
                 pstmt.executeUpdate();
             }
-            System.out.println("JSON ÆÄ½Ì ¹× µ¥ÀÌÅÍº£ÀÌ½º ÀúÀå ¿Ï·á");
+            System.out.println("JSON íŒŒì‹± ë° ë°ì´í„°ë² ì´ìŠ¤ ì €ìž¥ ì™„ë£Œ");
         }catch(Exception e){
             e.printStackTrace();
         }
