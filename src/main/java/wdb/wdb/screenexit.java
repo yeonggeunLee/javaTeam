@@ -10,7 +10,8 @@ import java.awt.event.*;
  *
  * @author 이영근
  */
-// 화면 x 클릭시 꺼지는 클래스
+
+// 화면 x 클릭시 화면이 꺼지는 기능 구현 클래스
 public class screenexit extends WindowAdapter {
     @Override
     public void windowClosing(WindowEvent we) {

@@ -10,6 +10,7 @@ package wdb.wdb;
  */
 import java.sql.*;
 
+// 입력한 데이터를 JSON데이터가 저장된 데이터베이스에서 검색하여 PassInput 클래스의 전달하는 변수에 저장하는 클래스
 public class select {
 
     Connection con;

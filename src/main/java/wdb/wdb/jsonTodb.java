@@ -18,7 +18,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 
-// 지하철 노선도 API 데이터베이스에 저장하는 클래스
+// 지하철역 정보 API 데이터베이스에 저장하는 클래스
 public class jsonTodb {
     Connection con = null;
     Statement stmt = null;
@@ -93,7 +93,6 @@ public class jsonTodb {
                 pstmt.setString(5, getFrCd);
                 pstmt.executeUpdate();
             }
-            System.out.println("JSON 파싱 및 데이터베이스 저장 완료");
         }catch(Exception e){
             e.printStackTrace();
         }

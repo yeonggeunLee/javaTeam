@@ -15,6 +15,8 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+// 메인화면 출력 및 모든 기능의 액션을 구현해 놓은 클래스
 public class Screens extends JFrame {
     
     // 입력 데이터 데이터베이스 생성
